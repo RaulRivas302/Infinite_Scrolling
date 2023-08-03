@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #content>div {
+            height: 200px;
+            width: 200px;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content"></div>
+    <div id="sentinel"></div>
+
+    <script>
+        // Constants
+        const COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'brown', 'grey', 'aqua'];
+        const BOXES_TO_LOAD = 10;
+        const ROOT_MARGIN = "250px";
+
+        const content = document.getElementById('content');
+        const sentinel = document.getElementById('sentinel');
+
+        function generateRandomColor() {
+            const randomIndex = Math.floor(Math.random() * COLORS.length);
+            return COLORS[randomIndex];
+        }
+
+        function createBox(color) {
+            const box = document.createElement('div');
+            box.style.backgroundColor = color;
+            return box;
+        }
+
+        function loadBoxes() {
+            for (let i = 0; i < BOXES_TO_LOAD; i++) {
+                const color = generateRandomColor();
+                const box = createBox(color);
+                content.appendChild(box);
+            }
+        }
+
+        function handleSentinelIntersection(entries, observer) {
+            if (entries[0].isIntersecting) {
+                loadBoxes();
+            }
+        }
+
+        function setupIntersectionObserver() {
+            const observer = new IntersectionObserver(handleSentinelIntersection, { rootMargin: ROOT_MARGIN });
+            observer.observe(sentinel);
+        }
+
+        loadBoxes();
+
+        setupIntersectionObserver();
+    </script>
+</body>
+
+</html>
